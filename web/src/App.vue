@@ -1,30 +1,41 @@
 <template>
-  <nav>
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
-  </nav>
-  <router-view/>
+  <div>
+    <div>成员昵称：{{ mem_name }}</div>
+    <div>成员ID：{{ mem_id }}</div>
+  </div>
+  <router-view></router-view>
 </template>
 
+<script>
+import $ from 'jquery';
+import { ref } from 'vue';
+
+export default {
+  name: "App",
+  setup: () => {
+    let mem_name = ref("");
+    let mem_id = ref("");
+
+    $.ajax({
+      url: "http://127.0.0.1:3000/pk/getMIDFinfo/",
+      type: "get",
+      success: resp => {
+        mem_name.value = resp.name;
+        mem_id.value = resp.id;
+      }
+    });
+
+    return {
+      mem_name,
+      mem_id
+    }
+  }
+}
+</script>
+
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
-
-nav {
-  padding: 30px;
-}
-
-nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-nav a.router-link-exact-active {
-  color: #42b983;
+body {
+  background-image: url("@/assets/background.png");
+  background-size: cover;
 }
 </style>
